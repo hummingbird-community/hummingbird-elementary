@@ -1,9 +1,12 @@
 .DS_Store
-/.build
+.build/
+.swiftpm/
+.vscode/
+.devcontainer/
 /Packages
+/*.xcodeproj
 xcuserdata/
-DerivedData/
-.swiftpm/configuration/registries.json
-.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
-.netrc
 Package.resolved
+/public
+/docs
+.benchmarkBaselines
