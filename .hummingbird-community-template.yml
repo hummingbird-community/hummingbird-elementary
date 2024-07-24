@@ -1,0 +1,3 @@
+ci:
+  linux:
+    images: ["swift:5.10", "swiftlang/swift:nightly-6.0-jammy"]
