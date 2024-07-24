@@ -1,3 +1,9 @@
 ci:
+  nightly: false
+  validate:
+    swiftformat:
+      version: 0.53.10
+  enable_tests: true
   linux:
     images: ["swift:5.10", "swiftlang/swift:nightly-6.0-jammy"]
+  mac: false
