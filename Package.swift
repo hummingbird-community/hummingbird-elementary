@@ -22,8 +22,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0-rc.1"),
-        .package(url: "https://github.com/sliemeobn/elementary.git", .upToNextMajor(from: "0.1.2")),
+        .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0-rc.5"),
+        .package(url: "https://github.com/sliemeobn/elementary.git", .upToNextMajor(from: "0.2.0")),
     ],
     targets: [
         .target(
