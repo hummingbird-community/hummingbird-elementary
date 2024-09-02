@@ -50,6 +50,20 @@ final class HTMLResponseTests: XCTestCase {
             XCTAssertEqual(String(buffer: response.body), Array(repeating: "<p></p>", count: count).joined())
         }
     }
+
+    func testRespondsWithCustomHeaders() async throws {
+        let router = Router().get { _, _ in
+            var response = HTMLResponse { TestPage() }
+            response.headers[.init("hx-refresh")!] = "true"
+            return response
+        }
+
+        try await Application(router: router).test(.router) { client in
+            let response = try await client.execute(uri: "/", method: .get)
+
+            XCTAssertEqual(response.headers[.init("hx-refresh")!], "true")
+        }
+    }
 }
 
 struct TestPage: HTMLDocument {

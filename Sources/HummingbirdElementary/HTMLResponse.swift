@@ -25,6 +25,9 @@ public struct HTMLResponse<Content: HTML & Sendable>: Sendable {
     /// The default is 1024 bytes.
     public var chunkSize: Int
 
+    /// Response headers
+    public var headers: HTTPFields = [.contentType: "text/html; charset=utf-8"]
+
     /// Creates a new HTMLResponse
     ///
     /// - Parameters:
@@ -49,7 +52,7 @@ extension HTMLResponse: ResponseGenerator {
     public consuming func response(from request: Request, context: some RequestContext) throws -> Response {
         .init(
             status: .ok,
-            headers: [.contentType: "text/html; charset=utf-8"],
+            headers: headers,
             body: .init { [self] writer in
                 try await self.content.render(into: StreamWriter(allocator: ByteBufferAllocator(), writer: writer), chunkSize: self.chunkSize)
                 try await writer.finish(nil)
