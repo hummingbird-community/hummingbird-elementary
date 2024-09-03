@@ -53,7 +53,7 @@ final class HTMLResponseTests: XCTestCase {
 
     func testRespondsWithCustomHeaders() async throws {
         let router = Router().get { _, _ in
-            var response = HTMLResponse { TestPage() }
+            var response = HTMLResponse(additionalHeaders: [.init("foo")!: "bar"]) { EmptyHTML() }
             response.headers[.init("hx-refresh")!] = "true"
             return response
         }
@@ -61,7 +61,21 @@ final class HTMLResponseTests: XCTestCase {
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
 
+            XCTAssertEqual(response.headers[.init("foo")!], "bar")
             XCTAssertEqual(response.headers[.init("hx-refresh")!], "true")
+            XCTAssertEqual(response.headers[.contentType], "text/html; charset=utf-8")
+        }
+    }
+
+    func testRespondsWithOverwrittenContentType() async throws {
+        let router = Router().get { _, _ in
+            HTMLResponse(additionalHeaders: [.contentType: "new"]) { EmptyHTML() }
+        }
+
+        try await Application(router: router).test(.router) { client in
+            let response = try await client.execute(uri: "/", method: .get)
+
+            XCTAssertEqual(response.headers[.contentType], "new")
         }
     }
 }
