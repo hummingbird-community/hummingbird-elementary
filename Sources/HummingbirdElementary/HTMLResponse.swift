@@ -68,7 +68,7 @@ extension HTMLResponse: ResponseGenerator {
     public consuming func response(from request: Request, context: some RequestContext) throws -> Response {
         .init(
             status: .ok,
-            headers: headers,
+            headers: self.headers,
             body: .init { [self] writer in
                 try await self.content.render(into: StreamWriter(allocator: ByteBufferAllocator(), writer: writer), chunkSize: self.chunkSize)
                 try await writer.finish(nil)
