@@ -56,21 +56,12 @@ public struct HTMLResponse<Content: HTML & Sendable>: Sendable {
 }
 
 extension HTMLResponse: ResponseGenerator {
-    struct StreamWriter: HTMLStreamWriter {
-        let allocator: ByteBufferAllocator
-        var writer: any ResponseBodyWriter
-
-        mutating func write(_ bytes: ArraySlice<UInt8>) async throws {
-            try await self.writer.write(self.allocator.buffer(bytes: bytes))
-        }
-    }
-
     public consuming func response(from request: Request, context: some RequestContext) throws -> Response {
         .init(
             status: .ok,
             headers: self.headers,
             body: .init { [self] writer in
-                try await self.content.render(into: StreamWriter(allocator: ByteBufferAllocator(), writer: writer), chunkSize: self.chunkSize)
+                try await writer.writeHTML(self.content, chunkSize: self.chunkSize)
                 try await writer.finish(nil)
             }
         )
