@@ -78,6 +78,24 @@ final class HTMLResponseTests: XCTestCase {
             XCTAssertEqual(response.headers[.contentType], "new")
         }
     }
+
+    func testRespondsByWritingToStream() async throws {
+        let router = Router().get { _, _ in
+            Response(
+                status: .ok,
+                headers: [:],
+                body: .init { writer in
+                    try await writer.writeHTML(p { "Hello" })
+                }
+            )
+        }
+
+        try await Application(router: router).test(.router) { client in
+            let response = try await client.execute(uri: "/", method: .get)
+
+            XCTAssertEqual(String(buffer: response.body), #"<p>Hello</p>"#)
+        }
+    }
 }
 
 struct TestPage: HTMLDocument {
