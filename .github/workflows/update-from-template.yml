@@ -1,0 +1,57 @@
+name: Update from template
+
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - '.hummingbird-community-template.yml'
+  workflow_dispatch:
+      
+jobs:
+  linux:
+      runs-on: macos-latest
+      timeout-minutes: 15
+      steps:
+      - name: App Token
+        uses: tibdex/github-app-token@v2
+        id: generate-token
+        with:
+          app_id: ${{ secrets.HB_APP_ID }}
+          private_key: ${{ secrets.HB_APP_PRIVATE_KEY }}
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          path: workspace
+      - name: Checkout Project Template
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          path: project-template
+          repository: hummingbird-community/hummingbird-community-template
+      - name: Install Dependencies
+        run: |
+          brew install mint
+          mint install hummingbird-project/swift-mustache-cli
+          echo "$HOME/.mint/bin" >> $GITHUB_PATH
+      - name: Update
+        run: |
+          cd project-template
+          ./update.sh ../workspace
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          path: workspace
+          commit-message: 'Update from hummingbird-community-template.'
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          branch: project-template-update
+          title: 'Update from Hummingbird Project Template'
+          body: 'Automated update of files from https://github.com/hummingbird-community/hummingbird-community-template'
+          base: main      
+
+  
