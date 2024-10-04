@@ -86,6 +86,7 @@ final class HTMLResponseTests: XCTestCase {
                 headers: [:],
                 body: .init { writer in
                     try await writer.writeHTML(p { "Hello" })
+                    try await writer.finish(nil)
                 }
             )
         }

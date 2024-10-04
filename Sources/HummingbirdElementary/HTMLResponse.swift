@@ -15,10 +15,10 @@ import Hummingbird
 ///   }
 /// }
 /// ```
-public struct HTMLResponse<Content: HTML & Sendable>: Sendable {
+public struct HTMLResponse {
     // NOTE: The Sendable requirement on Content can probably be removed in Swift 6 using a sending parameter, and some fancy ~Copyable @unchecked Sendable box type.
     // We only need to pass the HTML value to the response generator body closure
-    private let content: Content
+    private let content: any HTML & Sendable
 
     /// The number of bytes to write to the response body at a time.
     ///
@@ -44,12 +44,12 @@ public struct HTMLResponse<Content: HTML & Sendable>: Sendable {
     ///   - chunkSize: The number of bytes to write to the response body at a time.
     ///   - additionalHeaders: Additional headers to be merged with predefined headers.
     ///   - content: The `HTML` content to render in the response.
-    public init(chunkSize: Int = 1024, additionalHeaders: HTTPFields = [:], @HTMLBuilder content: () -> Content) {
+    public init(chunkSize: Int = 1024, additionalHeaders: HTTPFields = [:], @HTMLBuilder content: () -> some HTML & Sendable) {
         self.chunkSize = chunkSize
         if additionalHeaders.contains(.contentType) {
             self.headers = additionalHeaders
         } else {
-            self.headers = [.contentType: "text/html; charset=utf-8"] + additionalHeaders
+            self.headers.append(contentsOf: additionalHeaders)
         }
         self.content = content()
     }
@@ -60,8 +60,8 @@ extension HTMLResponse: ResponseGenerator {
         .init(
             status: .ok,
             headers: self.headers,
-            body: .init { [self] writer in
-                try await writer.writeHTML(self.content, chunkSize: self.chunkSize)
+            body: .init { [content, chunkSize] writer in
+                try await writer.writeHTML(content, chunkSize: chunkSize)
                 try await writer.finish(nil)
             }
         )
