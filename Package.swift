@@ -1,4 +1,4 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.0
 import PackageDescription
 
 let featureFlags: [SwiftSetting] = [
@@ -23,7 +23,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
-        .package(url: "https://github.com/sliemeobn/elementary.git", .upToNextMajor(from: "0.3.0")),
+        .package(url: "https://github.com/sliemeobn/elementary.git", branch: "main"),
     ],
     targets: [
         .target(
