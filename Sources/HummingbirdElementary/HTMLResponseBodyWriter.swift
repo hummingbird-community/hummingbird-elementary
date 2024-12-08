@@ -1,9 +1,9 @@
 import Elementary
 import Hummingbird
 
-struct HTMLResponseBodyStreamWriter: HTMLStreamWriter {
+struct HTMLResponseBodyStreamWriter<Writer: ResponseBodyWriter>: HTMLStreamWriter {
     let allocator: ByteBufferAllocator = .init()
-    var writer: any ResponseBodyWriter
+    var writer: Writer
 
     mutating func write(_ bytes: ArraySlice<UInt8>) async throws {
         try await self.writer.write(self.allocator.buffer(bytes: bytes))
