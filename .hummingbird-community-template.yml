@@ -5,5 +5,5 @@ ci:
       version: 0.53.10
   enable_tests: true
   linux:
-    images: ["swift:5.10", "swiftlang/swift:nightly-6.0-jammy"]
+    images: ["swift:5.10", "swift:6.0"]
   mac: false
