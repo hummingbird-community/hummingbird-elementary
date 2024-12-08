@@ -23,7 +23,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
-        .package(url: "https://github.com/sliemeobn/elementary.git", branch: "main"),
+        .package(url: "https://github.com/sliemeobn/elementary.git", from: "0.4.2"),
     ],
     targets: [
         .target(
