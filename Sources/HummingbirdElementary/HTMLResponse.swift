@@ -49,7 +49,7 @@ public struct HTMLResponse {
         self.init(chunkSize: chunkSize, additionalHeaders: additionalHeaders, value: .init(content()))
     }
 
-    #if swift(>=6.0)
+    #if compiler(>=6.0)
     @available(macOS 15, *)
     /// Creates a new HTMLResponse
     ///
