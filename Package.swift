@@ -19,11 +19,11 @@ let package = Package(
         .library(
             name: "HummingbirdElementary",
             targets: ["HummingbirdElementary"]
-        ),
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
-        .package(url: "https://github.com/sliemeobn/elementary.git", from: "0.4.3"),
+        .package(url: "https://github.com/elementary-swift/elementary.git", from: "0.4.3"),
     ],
     targets: [
         .target(

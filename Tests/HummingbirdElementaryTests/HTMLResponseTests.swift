@@ -22,7 +22,10 @@ final class HTMLResponseTests: XCTestCase {
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
 
-            XCTAssertEqual(String(buffer: response.body), #"<!DOCTYPE html><html><head><title>Test Page</title><link rel="stylesheet" href="/styles.css"></head><body><h1 id="foo">bar</h1></body></html>"#)
+            XCTAssertEqual(
+                String(buffer: response.body),
+                #"<!DOCTYPE html><html><head><title>Test Page</title><link rel="stylesheet" href="/styles.css"></head><body><h1 id="foo">bar</h1></body></html>"#
+            )
         }
     }
 
@@ -38,11 +41,13 @@ final class HTMLResponseTests: XCTestCase {
 
     func testRespondsWithALargeDocument() async throws {
         let count = 1000
-        let router = Router().get { _, _ in HTMLResponse {
-            for _ in 0..<count {
-                p {}
+        let router = Router().get { _, _ in
+            HTMLResponse {
+                for _ in 0..<count {
+                    p {}
+                }
             }
-        } }
+        }
 
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
