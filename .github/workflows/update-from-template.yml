@@ -54,4 +54,3 @@ jobs:
           body: 'Automated update of files from https://github.com/hummingbird-community/hummingbird-community-template'
           base: main      
 
-  
