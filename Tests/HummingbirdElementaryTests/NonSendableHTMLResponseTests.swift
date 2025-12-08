@@ -55,7 +55,7 @@ final class NonSendableHTMLResponseTests: XCTestCase {
 extension NonSendableHTML: Sendable {}
 
 struct NonSendableHTML: HTML {
-    var content: some HTML {
+    var body: some HTML {
         "Hello"
     }
 }
