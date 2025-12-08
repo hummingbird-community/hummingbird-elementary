@@ -10,14 +10,17 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-ci
+  cancel-in-progress: true
+
 jobs:
   linux:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
       matrix:
-        image: ["swift:5.10", "swift:6.0"]
-    
+        image: ["swift:6.0", "swift:6.2"]
     container:
       image: ${{ matrix.image }}
     steps:
@@ -29,11 +32,12 @@ jobs:
     - name: Convert coverage files
       run: |
         llvm-cov export -format="lcov" \
-          .build/debug/hummingbird-elementaryPackageTests.xctest \
+          .build/debug/workspacePackageTests.xctest \
           -ignore-filename-regex="\/Tests\/" \
           -ignore-filename-regex="\/Benchmarks\/" \
           -instr-profile .build/debug/codecov/default.profdata > info.lcov
     - name: Upload to codecov.io
       uses: codecov/codecov-action@v4
       with:
-        file: info.lcov
+        files: info.lcov
+        token: ${{ secrets.CODECOV_TOKEN }}
