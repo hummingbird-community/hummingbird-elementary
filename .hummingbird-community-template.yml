@@ -1,8 +1,7 @@
 ci:
   nightly: false
   validate:
-    swiftformat:
-      version: 0.53.10
+    swift-format: true
   enable_tests: true
   linux:
     images: ["swift:5.10", "swift:6.0"]
