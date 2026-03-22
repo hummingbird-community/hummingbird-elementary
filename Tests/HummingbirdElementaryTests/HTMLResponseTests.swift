@@ -56,6 +56,16 @@ final class HTMLResponseTests: XCTestCase {
         }
     }
 
+    func testRespondsWithCustomStatus() async throws {
+        let router = Router().get { _, _ in HTMLResponse(status: .created) { EmptyHTML() } }
+
+        try await Application(router: router).test(.router) { client in
+            let response = try await client.execute(uri: "/", method: .get)
+            XCTAssertEqual(response.status, .created)
+            XCTAssertEqual(response.headers[.contentType], "text/html; charset=utf-8")
+        }
+    }
+
     func testRespondsWithCustomHeaders() async throws {
         let router = Router().get { _, _ in
             var response = HTMLResponse(additionalHeaders: [.init("foo")!: "bar"]) { EmptyHTML() }

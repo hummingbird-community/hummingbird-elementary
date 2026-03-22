@@ -57,7 +57,7 @@ public struct HTMLResponse {
         additionalHeaders: HTTPFields = [:],
         @HTMLBuilder content: () -> some HTML & Sendable
     ) {
-        self.init(chunkSize: chunkSize, additionalHeaders: additionalHeaders, value: .init(content()))
+        self.init(status: status, chunkSize: chunkSize, additionalHeaders: additionalHeaders, value: .init(content()))
     }
 
     #if compiler(>=6.0)
@@ -75,7 +75,7 @@ public struct HTMLResponse {
         additionalHeaders: HTTPFields = [:],
         @HTMLBuilder content: () -> sending some HTML
     ) {
-        self.init(chunkSize: chunkSize, additionalHeaders: additionalHeaders, value: .init(content()))
+        self.init(status: status, chunkSize: chunkSize, additionalHeaders: additionalHeaders, value: .init(content()))
     }
     #endif
 
