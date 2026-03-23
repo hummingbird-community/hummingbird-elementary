@@ -19,7 +19,6 @@ final class NonSendableHTMLResponseTests: XCTestCase {
         }
     }
 
-    #if compiler(>=6.0)
     func testRespondsWithANonSendable() async throws {
         guard #available(macOS 15.0, *) else {
             throw XCTSkip("Test requires macOS 15.0")
@@ -33,7 +32,6 @@ final class NonSendableHTMLResponseTests: XCTestCase {
             XCTAssertEqual(String(buffer: response.body), #"<div>Hello</div>"#)
         }
     }
-    #endif
 
     // NOTE: hard to test debug assertions, I leave this test in for manual testing
     // func testThrowsOnSecondWriteOfNonSendable() async throws {
