@@ -60,8 +60,6 @@ public struct HTMLResponse {
         self.init(status: status, chunkSize: chunkSize, additionalHeaders: additionalHeaders, value: .init(content()))
     }
 
-    #if compiler(>=6.0)
-    @available(macOS 15, *)
     /// Creates a new HTMLResponse
     ///
     /// - Parameters:
@@ -69,6 +67,7 @@ public struct HTMLResponse {
     ///   - chunkSize: The number of bytes to write to the response body at a time.
     ///   - additionalHeaders: Additional headers to be merged with predefined headers.
     ///   - content: The `HTML` content to render in the response.
+    @available(macOS 15, *)
     public init(
         status: HTTPResponse.Status = .ok,
         chunkSize: Int = 1024,
@@ -77,7 +76,6 @@ public struct HTMLResponse {
     ) {
         self.init(status: status, chunkSize: chunkSize, additionalHeaders: additionalHeaders, value: .init(content()))
     }
-    #endif
 
     init(status: HTTPResponse.Status = .ok, chunkSize: Int, additionalHeaders: HTTPFields = [:], value: _SendableAnyHTMLBox) {
         self.status = status

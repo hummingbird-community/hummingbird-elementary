@@ -1,10 +1,8 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.0
 import PackageDescription
 
 let featureFlags: [SwiftSetting] = [
-    .enableExperimentalFeature("StrictConcurrency=complete"),
-    .enableUpcomingFeature("StrictConcurrency=complete"),
-    .enableUpcomingFeature("ExistentialAny"),
+    .enableUpcomingFeature("ExistentialAny")
 ]
 
 let package = Package(
@@ -23,7 +21,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
-        .package(url: "https://github.com/elementary-swift/elementary.git", from: "0.4.3"),
+        .package(url: "https://github.com/elementary-swift/elementary.git", from: "0.7.0"),
     ],
     targets: [
         .target(
