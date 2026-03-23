@@ -2,44 +2,48 @@ import Elementary
 import Hummingbird
 import HummingbirdElementary
 import HummingbirdTesting
-import XCTest
+import Testing
 
-final class HTMLResponseTests: XCTestCase {
-    func testSetsHeadersAndStatus() async throws {
+struct HTMLResponseTests {
+    @Test
+    func setsHeadersAndStatus() async throws {
         let router = Router().get { _, _ in HTMLResponse { EmptyHTML() } }
 
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
-            XCTAssertEqual(response.status, .ok)
-            XCTAssertEqual(response.headers[.contentType], "text/html; charset=utf-8")
-            XCTAssertEqual(response.body.readableBytes, 0)
+            #expect(response.status == .ok)
+            #expect(response.headers[.contentType] == "text/html; charset=utf-8")
+            #expect(response.body.readableBytes == 0)
         }
     }
 
-    func testRespondsWithAPage() async throws {
+    @Test
+    func respondsWithAPage() async throws {
         let router = Router().get { _, _ in HTMLResponse { TestPage() } }
 
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
 
-            XCTAssertEqual(
-                String(buffer: response.body),
-                #"<!DOCTYPE html><html><head><title>Test Page</title><link rel="stylesheet" href="/styles.css"></head><body><h1 id="foo">bar</h1></body></html>"#
+            #expect(
+                String(buffer: response.body)
+                    == #"<!DOCTYPE html><html><head><title>Test Page</title><link rel="stylesheet" href="/styles.css"></head><body><h1 id="foo">bar</h1></body></html>"#
             )
         }
     }
 
-    func testRespondsWithAFragment() async throws {
+    @Test
+    func respondsWithAFragment() async throws {
         let router = Router().get { _, _ in HTMLResponse { p {} } }
 
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
 
-            XCTAssertEqual(String(buffer: response.body), #"<p></p>"#)
+            #expect(String(buffer: response.body) == #"<p></p>"#)
         }
     }
 
-    func testRespondsWithALargeDocument() async throws {
+    @Test
+    func respondsWithALargeDocument() async throws {
         let count = 1000
         let router = Router().get { _, _ in
             HTMLResponse {
@@ -52,21 +56,23 @@ final class HTMLResponseTests: XCTestCase {
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
 
-            XCTAssertEqual(String(buffer: response.body), Array(repeating: "<p></p>", count: count).joined())
+            #expect(String(buffer: response.body) == Array(repeating: "<p></p>", count: count).joined())
         }
     }
 
-    func testRespondsWithCustomStatus() async throws {
+    @Test
+    func respondsWithCustomStatus() async throws {
         let router = Router().get { _, _ in HTMLResponse(status: .created) { EmptyHTML() } }
 
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
-            XCTAssertEqual(response.status, .created)
-            XCTAssertEqual(response.headers[.contentType], "text/html; charset=utf-8")
+            #expect(response.status == .created)
+            #expect(response.headers[.contentType] == "text/html; charset=utf-8")
         }
     }
 
-    func testRespondsWithCustomHeaders() async throws {
+    @Test
+    func respondsWithCustomHeaders() async throws {
         let router = Router().get { _, _ in
             var response = HTMLResponse(additionalHeaders: [.init("foo")!: "bar"]) { EmptyHTML() }
             response.headers[.init("hx-refresh")!] = "true"
@@ -76,13 +82,14 @@ final class HTMLResponseTests: XCTestCase {
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
 
-            XCTAssertEqual(response.headers[.init("foo")!], "bar")
-            XCTAssertEqual(response.headers[.init("hx-refresh")!], "true")
-            XCTAssertEqual(response.headers[.contentType], "text/html; charset=utf-8")
+            #expect(response.headers[.init("foo")!] == "bar")
+            #expect(response.headers[.init("hx-refresh")!] == "true")
+            #expect(response.headers[.contentType] == "text/html; charset=utf-8")
         }
     }
 
-    func testRespondsWithOverwrittenContentType() async throws {
+    @Test
+    func respondsWithOverwrittenContentType() async throws {
         let router = Router().get { _, _ in
             HTMLResponse(additionalHeaders: [.contentType: "new"]) { EmptyHTML() }
         }
@@ -90,11 +97,12 @@ final class HTMLResponseTests: XCTestCase {
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
 
-            XCTAssertEqual(response.headers[.contentType], "new")
+            #expect(response.headers[.contentType] == "new")
         }
     }
 
-    func testRespondsByWritingToStream() async throws {
+    @Test
+    func respondsByWritingToStream() async throws {
         let router = Router().get { _, _ in
             Response(
                 status: .ok,
@@ -109,7 +117,7 @@ final class HTMLResponseTests: XCTestCase {
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
 
-            XCTAssertEqual(String(buffer: response.body), #"<p>Hello</p>"#)
+            #expect(String(buffer: response.body) == #"<p>Hello</p>"#)
         }
     }
 }

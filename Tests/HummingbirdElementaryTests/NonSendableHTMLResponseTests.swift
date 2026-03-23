@@ -2,10 +2,11 @@ import Elementary
 import Hummingbird
 import HummingbirdElementary
 import HummingbirdTesting
-import XCTest
+import Testing
 
-final class NonSendableHTMLResponseTests: XCTestCase {
-    func testAllowsSendableValuesToBeWrittenTwice() async throws {
+struct NonSendableHTMLResponseTests {
+    @Test
+    func allowsSendableValuesToBeWrittenTwice() async throws {
         let router = Router().get { request, context in
             let html = HTMLResponse { "Hello" }
             try await html.response(from: request, context: context).body.write(TestWriter())
@@ -15,21 +16,19 @@ final class NonSendableHTMLResponseTests: XCTestCase {
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
 
-            XCTAssertEqual(String(buffer: response.body), #"Hello"#)
+            #expect(String(buffer: response.body) == #"Hello"#)
         }
     }
 
-    func testRespondsWithANonSendable() async throws {
-        guard #available(macOS 15.0, *) else {
-            throw XCTSkip("Test requires macOS 15.0")
-        }
-
+    @Test
+    @available(macOS 15.0, *)
+    func respondsWithANonSendable() async throws {
         let router = Router().get { _, _ in HTMLResponse { div { NonSendableHTML() } } }
 
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
 
-            XCTAssertEqual(String(buffer: response.body), #"<div>Hello</div>"#)
+            #expect(String(buffer: response.body) == #"<div>Hello</div>"#)
         }
     }
 
