@@ -90,7 +90,7 @@ public struct HTMLResponse {
 }
 
 extension HTMLResponse: ResponseGenerator {
-    public consuming func response(from request: Request, context: some RequestContext) throws -> Response {
+    public consuming func response(from request: Request, context: some RequestContext) -> Response {
         .init(
             status: self.status,
             headers: self.headers,
