@@ -20,13 +20,13 @@ jobs:
           app_id: ${{ secrets.HB_APP_ID }}
           private_key: ${{ secrets.HB_APP_PRIVATE_KEY }}
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 1
           path: hummingbird-elementary
       - name: Checkout Project Template
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 1
