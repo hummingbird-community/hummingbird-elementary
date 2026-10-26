@@ -4,5 +4,5 @@ ci:
     swift-format: true
   enable_tests: true
   linux:
-    images: ["swift:6.2", "swift:6.3", "swift:6.4"]
+    images: ["swift:6.2", "swift:6.3"]
   mac: false
