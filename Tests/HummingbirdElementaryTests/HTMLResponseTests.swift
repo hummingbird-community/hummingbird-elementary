@@ -26,7 +26,7 @@ struct HTMLResponseTests {
 
             #expect(
                 String(buffer: response.body)
-                    == #"<!DOCTYPE html><html><head><title>Test Page</title><link rel="stylesheet" href="/styles.css"></head><body><h1 id="foo">bar</h1></body></html>"#
+                    == #"<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Test Page</title><link rel="stylesheet" href="/styles.css"></head><body><h1 id="foo">bar</h1></body></html>"#
             )
         }
     }
