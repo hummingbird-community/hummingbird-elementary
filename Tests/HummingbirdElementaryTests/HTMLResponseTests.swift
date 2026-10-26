@@ -24,17 +24,10 @@ struct HTMLResponseTests {
         try await Application(router: router).test(.router) { client in
             let response = try await client.execute(uri: "/", method: .get)
 
-            #if compiler(<6.1)
-            #expect(
-                String(buffer: response.body)
-                    == #"<!DOCTYPE html><html><head><title>Test Page</title><link rel="stylesheet" href="/styles.css"></head><body><h1 id="foo">bar</h1></body></html>"#
-            )
-            #else
             #expect(
                 String(buffer: response.body)
                     == #"<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Test Page</title><link rel="stylesheet" href="/styles.css"></head><body><h1 id="foo">bar</h1></body></html>"#
             )
-            #endif
         }
     }
 
