@@ -20,7 +20,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0", traits: []),
+        .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.19.0", traits: []),
         .package(url: "https://github.com/elementary-swift/elementary.git", from: "0.7.0"),
     ],
     targets: [
